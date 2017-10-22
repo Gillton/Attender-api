@@ -2,6 +2,9 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import morgan from 'morgan';
 
+// Import database models
+import db from './models/db';
+
 // Import endpoints
 import classRoutes from './routes/classes';
 import collectRoutes from './routes/collect';
