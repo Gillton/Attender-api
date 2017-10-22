@@ -23,9 +23,11 @@ router.get('/', (req, res) => {
                 res.sendStatus(401);
             } else {
                 Class.find({ instructor: info.id }, (err, classes) => {
-                    if (err)
-                        console.log(err);
-                    res.json(classes);
+                    Class.populate(classes, {path: 'students'}, (err, classes) => {
+                        if (err)
+                            console.log(err);
+                        res.json(classes);
+                    });
                 });
             }
         });
