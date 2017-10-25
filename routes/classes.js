@@ -16,17 +16,6 @@ router.get('/', (req, res) => {
         }
     });
 
-    // let p = new Person({
-    //     _id: '7d267061-961d-482e-9332-ca3d925650a8',
-    //     name: 'Adam Eaton'
-    // });
-    // p.save((err, prsn) => {
-
-    // })
-    // c.save((err, t) => {
-
-    // });
-
     client
         .api('/me')
         .select('id')
@@ -44,6 +33,39 @@ router.get('/', (req, res) => {
             }
         });
 });
+
+// New and Edit endpoint
+router.put('/:id', (req, res) => {
+    let access_token = req.header('Authorization');
+    let client = Client.init({
+        debugLogging: true,
+        authProvider: (done) => {
+            done(null, access_token);
+        }
+    });
+
+    client
+        .api('/me')
+        .select('id')
+        .get((err, info) => {
+            if (err) {
+                res.sendStatus(401);
+            } else {
+                let classId = req.params.id;
+                let newClass = req.body;
+                
+                if (classId === 'new') {
+                    console.log('New Class');
+                } else {
+                    Class.update({ _id: classId}, newClass, (err, c) => {
+                        if (err)
+                            console.log(err);
+                        res.json(c);
+                    });
+                }
+            }
+        });
+})
 
 router.get('/:id', (req, res) => {
     res.sendStatus(200);
